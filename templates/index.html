@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP4 to MP3 Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 MP4 to MP3 Converter</h1>
+            <p>Convert your video files to audio format quickly and easily</p>
+        </header>
+
+        <main>
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <!-- Upload Form -->
+            <div class="upload-section">
+                <form method="POST" enctype="multipart/form-data" class="upload-form">
+                    <div class="file-input-container">
+                        <input type="file" name="file" id="file" accept=".mp4,.avi,.mov,.mkv,.wmv" required>
+                        <label for="file" class="file-label">
+                            <span class="file-icon">📁</span>
+                            <span class="file-text">Choose a video file</span>
+                        </label>
+                    </div>
+
+                    <div class="form-info">
+                        <p>Supported formats: MP4, AVI, MOV, MKV, WMV</p>
+                        <p>Maximum file size: 10GB</p>
+                    </div>
+                    <button type="submit" class="convert-btn">Convert to MP3</button>
+                </form>
+            </div>
+
+            <!-- Download Section -->
+            {% if converted_file %}
+            <div class="download-section">
+                <h3>✅ Conversion Complete!</h3>
+                <p>Your file has been converted successfully.</p>
+                <a href="{{ url_for('download_file', filename=converted_file) }}" class="download-btn" download>
+                    📥 Download MP3
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Cleanup Section -->
+            <div class="cleanup-section">
+                <form method="POST" action="{{ url_for('cleanup_files') }}"
+                    onsubmit="return confirm('This will delete all uploaded and converted files. Continue?')">
+                    <button type="submit" class="cleanup-btn">🧹 Clean Up All Files</button>
+                </form>
+            </div>
+
+            <!-- Debug Link -->
+            <div class="debug-section">
+                <p><a href="{{ url_for('debug_info') }}" target="_blank">🔧 System Status</a></p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Built with Python Flask | MP4 to MP3 Converter</p>
+        </footer>
+    </div>
+
+    <script>
+        // File input styling
+        const fileInput = document.getElementById('file');
+        const fileText = document.querySelector('.file-text');
+
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                fileText.textContent = this.files[0].name;
+            } else {
+                fileText.textContent = 'Choose a video file';
+            }
+        });
+
+        // Auto-hide flash messages after 5 seconds
+        setTimeout(function () {
+            const flashMessages = document.querySelector('.flash-messages');
+            if (flashMessages) {
+                flashMessages.style.opacity = '0';
+                setTimeout(() => flashMessages.remove(), 300);
+            }
+        }, 5000);
+    </script>
+</body>
+
+</html>
