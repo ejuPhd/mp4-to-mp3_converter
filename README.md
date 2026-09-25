@@ -140,7 +140,7 @@ Flask==3.0.0
 moviepy==1.0.3
 ffmpeg-python==0.2.0
 werkzeug==3.0.1
-typing-extensions==4.8.0
+typing-extensions>=4.15.0,<5
 
 21. [gitHub/ejuPhd](https://github.com/ejuPhd/mp4-to-mp3_converter)
 
